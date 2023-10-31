@@ -7,25 +7,27 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
-type CardSearchResponse struct {
+type CardAutocompleteResponse struct {
 	Object      string   `json:"object"`
 	TotalValues int      `json:"total_values"`
 	Data        []string `json:"data"`
 }
 
-func (s CardSearchResponse) TextOutput() string {
-	if len(s.Data) > 0 {
-		return fmt.Sprintf(
-			"Object: %s\nTotalValue: %v\nFirst Result: %v",
-			s.Object,
-			s.TotalValues,
-			s.Data[0],
-		)
-	}
-
-	return fmt.Sprintf("Object: %s\nTotal values: %v", s.Object, s.TotalValues)
+type CardResponse struct {
+	Id            uuid.UUID         `json:"id"`
+	OracleId      uuid.UUID         `json:"oracle_id"`
+	Name          string            `json:"name"`
+	ImageUris     map[string]string `json:"image_uris"`
+	ManaCost      string            `json:"mana_cost"`
+	Cmc           int               `json:"cmc"`
+	TypeLine      string            `json:"type_line"`
+	OracleText    string            `json:"oracle_text"`
+	Colors        []string          `json:"colors"`
+	ColorIdentity []string          `json:"color_identity"`
+	Legalities    map[string]string `json:"legalities"`
 }
 
 func main() {
@@ -36,25 +38,45 @@ func main() {
 		c.HTML(http.StatusOK, "", Home())
 	})
 
-	s.POST("/card/search/", func(c *gin.Context) {
-		var searchRes CardSearchResponse
-		query := c.PostForm("card-name-search")
-		resp, err := http.Get(
-			fmt.Sprintf(
-				"https://api.scryfall.com/cards/autocomplete?q=%s&inlude_extras=false",
-				query,
-			),
-		)
-		if err != nil {
-			log.Println(err)
-		}
-		defer resp.Body.Close()
-		if err := json.NewDecoder(resp.Body).Decode(&searchRes); err != nil {
-			log.Println(err)
-		}
-
-		c.HTML(http.StatusOK, "", SearchResult(searchRes.Data))
-	})
+	s.POST("/card/search/", searchCardsAutocomplete)
+	s.GET("/card/:cardname", getCardByName)
 
 	s.Run(":8080")
+}
+
+func getCardByName(c *gin.Context) {
+	var cardResp CardResponse
+	query := c.Param("cardname")
+	resp, err := http.Get(
+		fmt.Sprintf("https://api.scryfall.com/cards/named?exact=%s", query),
+	)
+	if err != nil {
+		log.Println(err)
+	}
+	defer resp.Body.Close()
+	if err := json.NewDecoder(resp.Body).Decode(&cardResp); err != nil {
+		log.Println(err)
+	}
+
+	c.HTML(http.StatusOK, "", CardComponent(cardResp))
+}
+
+func searchCardsAutocomplete(c *gin.Context) {
+	var searchRes CardAutocompleteResponse
+	query := c.PostForm("card-name-search")
+	resp, err := http.Get(
+		fmt.Sprintf(
+			"https://api.scryfall.com/cards/autocomplete?q=%s&inlude_extras=false",
+			query,
+		),
+	)
+	if err != nil {
+		log.Println(err)
+	}
+	defer resp.Body.Close()
+	if err := json.NewDecoder(resp.Body).Decode(&searchRes); err != nil {
+		log.Println(err)
+	}
+
+	c.HTML(http.StatusOK, "", SearchResult(searchRes.Data))
 }
