@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 templ Home() {
 	<!DOCTYPE html>
 	<html>
@@ -24,11 +26,22 @@ templ NavBar() {
 	</div>
 }
 
+templ CardComponent(card CardResponse) {
+	<div>
+		<h2>{ card.Name }</h2>
+		<div>
+			<p>{ card.ManaCost }</p>
+			<p>{ card.TypeLine }</p>
+			<p>{ card.OracleText }</p>
+		</div>
+	</div>
+}
+
 templ SearchResult(cards []string) {
 	<div>
 		<ul>
 			for _, card := range cards {
-				<li>{ card }</li>
+				<li><a href={ templ.SafeURL(fmt.Sprintf("/card/%s", card)) }>{ card }</a></li>
 			}
 		</ul>
 	</div>
