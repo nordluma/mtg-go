@@ -53,7 +53,7 @@ func main() {
 			log.Println(err)
 		}
 
-		c.JSON(http.StatusOK, searchRes)
+		c.HTML(http.StatusOK, "", SearchResult(searchRes.Data))
 	})
 
 	s.Run(":8080")
