@@ -2,10 +2,13 @@ module github.com/nordluma/mtg-go
 
 go 1.21.3
 
-require github.com/gin-gonic/gin v1.9.1
+require (
+	github.com/a-h/templ v0.2.432
+	github.com/gin-gonic/gin v1.9.1
+	github.com/google/uuid v1.4.0
+)
 
 require (
-	github.com/a-h/templ v0.2.432 // indirect
 	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
