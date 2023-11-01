@@ -22,7 +22,7 @@ type CardResponse struct {
 	Name          string            `json:"name"`
 	ImageUris     map[string]string `json:"image_uris"`
 	ManaCost      string            `json:"mana_cost"`
-	Cmc           int               `json:"cmc"`
+	Cmc           float32           `json:"cmc"`
 	TypeLine      string            `json:"type_line"`
 	OracleText    string            `json:"oracle_text"`
 	Colors        []string          `json:"colors"`
@@ -45,7 +45,6 @@ func main() {
 }
 
 func getCardByName(c *gin.Context) {
-	var cardResp CardResponse
 	query := c.Param("cardname")
 	resp, err := http.Get(
 		fmt.Sprintf("https://api.scryfall.com/cards/named?exact=%s", query),
@@ -53,7 +52,10 @@ func getCardByName(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 	}
+
 	defer resp.Body.Close()
+
+	var cardResp CardResponse
 	if err := json.NewDecoder(resp.Body).Decode(&cardResp); err != nil {
 		log.Println(err)
 	}
@@ -62,7 +64,6 @@ func getCardByName(c *gin.Context) {
 }
 
 func searchCardsAutocomplete(c *gin.Context) {
-	var searchRes CardAutocompleteResponse
 	query := c.PostForm("card-name-search")
 	resp, err := http.Get(
 		fmt.Sprintf(
@@ -73,7 +74,10 @@ func searchCardsAutocomplete(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 	}
+
 	defer resp.Body.Close()
+
+	var searchRes CardAutocompleteResponse
 	if err := json.NewDecoder(resp.Body).Decode(&searchRes); err != nil {
 		log.Println(err)
 	}
