@@ -7,6 +7,7 @@ templ Home() {
 	<html>
 		<head>
 			<title>Home</title>
+			<script src="https://unpkg.com/htmx.org@1.9.6" integrity="sha384-FhXw7b6AlE/jyjlZH5iHa/tTe9EpJ1Y55RjcgPbjeWMskSxZt1v9qkxLJWNJaGni" crossorigin="anonymous"></script>
 		</head>
 		<body>
 			@NavBar()
@@ -19,9 +20,19 @@ templ Home() {
 
 templ NavBar() {
 	<div>
-		<form action="/card/search" method="post">
-			<input type="text" name="card-name-search" placeholder="Search card"/>
-			<input type="submit" name="search"/>
+		<form hx-post="/card/">
+			<div>
+				<input
+ 					type="text"
+ 					name="card-name-search"
+ 					placeholder="Search card"
+ 					hx-post="/card/search"
+ 					hx-trigger="keyup changed delay:500ms"
+ 					hx-target="#autocomplete-results"
+				/>
+				<input type="submit" name="search"/>
+				<div id="autocomplete-results"></div>
+			</div>
 		</form>
 	</div>
 }
@@ -41,7 +52,9 @@ templ SearchResult(cards []string) {
 	<div>
 		<ul>
 			for _, card := range cards {
-				<li><a href={ templ.SafeURL(fmt.Sprintf("/card/%s", card)) }>{ card }</a></li>
+				<div>
+					<li><a href={ templ.SafeURL(fmt.Sprintf("/card/%s", card)) }>{ card }</a></li>
+				</div>
 			}
 		</ul>
 	</div>
