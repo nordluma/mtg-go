@@ -20,7 +20,7 @@ type CardResponse struct {
 	Id            uuid.UUID         `json:"id"`
 	OracleId      uuid.UUID         `json:"oracle_id"`
 	Name          string            `json:"name"`
-	ImageUris     map[string]string `json:"image_uris"`
+	ImageUris     CardImageUris     `json:"image_uris"`
 	ManaCost      string            `json:"mana_cost"`
 	Cmc           float32           `json:"cmc"`
 	TypeLine      string            `json:"type_line"`
@@ -28,6 +28,15 @@ type CardResponse struct {
 	Colors        []string          `json:"colors"`
 	ColorIdentity []string          `json:"color_identity"`
 	Legalities    map[string]string `json:"legalities"`
+}
+
+type CardImageUris struct {
+	Small      string `json:"small"`
+	Normal     string `json:"normal"`
+	Large      string `json:"large"`
+	Png        string `json:"png"`
+	ArtCrop    string `json:"art_crop"`
+	BorderCrop string `json:"border_crop"`
 }
 
 func main() {
