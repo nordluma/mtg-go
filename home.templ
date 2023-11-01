@@ -41,9 +41,14 @@ templ CardComponent(card CardResponse) {
 	<div>
 		<h2>{ card.Name }</h2>
 		<div>
-			<p>{ card.ManaCost }</p>
-			<p>{ card.TypeLine }</p>
-			<p>{ card.OracleText }</p>
+			<image
+ 				src={ card.ImageUris.Normal }
+			></image>
+			<div>
+				<p>{ card.ManaCost }</p>
+				<p>{ card.TypeLine }</p>
+				<p>{ card.OracleText }</p>
+			</div>
 		</div>
 	</div>
 }
