@@ -20,20 +20,18 @@ templ Home() {
 
 templ NavBar() {
 	<div>
-		<form hx-post="/card/">
-			<div>
-				<input
- 					type="text"
- 					name="card-name-search"
- 					placeholder="Search card"
- 					hx-post="/card/search"
- 					hx-trigger="keyup changed delay:500ms"
- 					hx-target="#autocomplete-results"
-				/>
-				<input type="submit" name="search"/>
-				<div id="autocomplete-results"></div>
-			</div>
-		</form>
+		<div>
+			<input
+ 				type="text"
+ 				name="card-name-search"
+ 				placeholder="Search card"
+ 				hx-post="/card/search"
+ 				hx-trigger="keyup changed delay:500ms"
+ 				hx-target="#autocomplete-results"
+			/>
+			<input type="submit" name="search"/>
+			<div id="autocomplete-results"></div>
+		</div>
 	</div>
 }
 

@@ -84,7 +84,7 @@ func NavBar() templ.Component {
 			templ_7745c5c3_Var5 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><form hx-post=\"/card/\"><div><input type=\"text\" name=\"card-name-search\" placeholder=\"Search card\" hx-post=\"/card/search\" hx-trigger=\"keyup changed delay:500ms\" hx-target=\"#autocomplete-results\"> <input type=\"submit\" name=\"search\"><div id=\"autocomplete-results\"></div></div></form></div>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div><div><input type=\"text\" name=\"card-name-search\" placeholder=\"Search card\" hx-post=\"/card/search\" hx-trigger=\"keyup changed delay:500ms\" hx-target=\"#autocomplete-results\"> <input type=\"submit\" name=\"search\"><div id=\"autocomplete-results\"></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
